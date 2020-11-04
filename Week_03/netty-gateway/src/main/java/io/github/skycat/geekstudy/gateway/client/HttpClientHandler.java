@@ -44,8 +44,9 @@ public class HttpClientHandler extends ChannelInboundHandlerAdapter {
 		// to gateway
 		FullHttpResponse outResponse = new DefaultFullHttpResponse(HttpVersion.HTTP_1_1, response.status());
 		outResponse.content().writeBytes(response.content(), 0, response.content().readableBytes());
-		outResponse.headers().set(HttpHeaderNames.CONTENT_TYPE, HttpHeaderValues.TEXT_PLAIN);
-		outResponse.headers().set(HttpHeaderNames.CONTENT_LENGTH, outResponse.content().readableBytes());
+		outResponse.headers().set(HttpHeaderNames.CONTENT_TYPE, HttpHeaderValues.TEXT_PLAIN)
+			.set(HttpHeaderNames.CONTENT_LENGTH, outResponse.content().readableBytes())
+			.set(HttpHeaderNames.CONNECTION, HttpHeaderValues.KEEP_ALIVE);
 		requestContext.getCtx().writeAndFlush(outResponse);
 		
 		ReferenceCountUtil.release(msg);

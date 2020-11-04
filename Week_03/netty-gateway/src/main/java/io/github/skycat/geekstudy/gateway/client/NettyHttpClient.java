@@ -71,7 +71,7 @@ public class NettyHttpClient {
 final class HttpClient {
 	private static final Logger LOGGER = LoggerFactory.getLogger(HttpClient.class);
 	/** max connection */
-	private static final int MAX_CONNECTION = 10;
+	private static final int MAX_CONNECTION = 100;
 	/** bootstrap */
     private Bootstrap bootstrap;
     private EventLoopGroup eventLoopGroup;
@@ -99,12 +99,12 @@ final class HttpClient {
 				return new FixedChannelPool(bootstrap.remoteAddress(key), new ChannelPoolHandler() {
 					@Override
 					public void channelReleased(Channel ch) throws Exception {
-						LOGGER.debug("released channel[{} - {}]", ch.remoteAddress(), ch.localAddress());
+						//LOGGER.debug("released channel[{} - {}]", ch.remoteAddress(), ch.localAddress());
 					}
 					
 					@Override
 					public void channelCreated(Channel ch) throws Exception {
-						LOGGER.debug("created channel[{} - {}]", ch.remoteAddress(), ch.localAddress());
+						//LOGGER.debug("created channel[{} - {}]", ch.remoteAddress(), ch.localAddress());
 						ChannelPipeline pipeline = ch.pipeline();
 						pipeline.addLast(new HttpClientCodec())
 						.addLast(new HttpObjectAggregator(1024 * 1024))
@@ -113,7 +113,7 @@ final class HttpClient {
 					
 					@Override
 					public void channelAcquired(Channel ch) throws Exception {
-						LOGGER.debug("acquired channel[{} - {}]", ch.remoteAddress(), ch.localAddress());
+						//LOGGER.debug("acquired channel[{} - {}]", ch.remoteAddress(), ch.localAddress());
 					}
 				}, MAX_CONNECTION);
 			}

@@ -60,7 +60,7 @@ public class ProxyHandler extends ChannelInboundHandlerAdapter {
     @Override
     public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
         FullHttpRequest request = (FullHttpRequest) msg;
-        LOGGER.debug("request: {}", request);
+        //LOGGER.debug("request: {}", request);
         try {
             if (!"/api/registerServer".equals(request.uri())) {
                 String route = loadBalanceRouter.route(serverList);
@@ -69,11 +69,11 @@ public class ProxyHandler extends ChannelInboundHandlerAdapter {
                     writeResponse(ctx, request, response);
                     return;
                 }
-                LOGGER.debug("request server: {}", route);
+                //LOGGER.debug("request server: {}", route);
                 
                 // filter
                 filterChain.doFilter(request, ctx);
-                LOGGER.debug("headers: {}", request.headers());
+                //LOGGER.debug("headers: {}", request.headers());
                 
                 NettyHttpClient.doGetRequest(route, request, ctx);
                 
